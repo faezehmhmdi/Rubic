@@ -23,7 +23,7 @@ public class RubikState {
      */
     char[] positions;
 
-    public RubikState() {
+    RubikState() {
         // create a solved cube
         positions = new char[24];
         for (int i = 0; i < 4; i++)
@@ -40,7 +40,7 @@ public class RubikState {
             positions[i] = 'y';
     }
 
-    public RubikState(char[] positions) {
+    RubikState(char[] positions) {
         this.positions = positions;
     }
 
@@ -54,19 +54,19 @@ public class RubikState {
      * U' - up counter clockwise
      */
     private static int[] F1 = {2, 0, 3, 1, 8, 9, 6, 7, 12, 13, 10, 11, 23, 22, 14, 15, 16, 17, 18, 19, 20, 21, 5, 4};
-    private static int[] F1C = permInverse(F1);
+    private static int[] F1C = inv(F1);
     private static int[] F2 = {20, 1, 22, 3, 6, 4, 7, 5, 0, 9, 2, 11, 12, 13, 14, 15, 8, 17, 10, 19, 16, 21, 18, 23};
-    private static int[] F2C = permInverse(F2);
+    private static int[] F2C = inv(F2);
     private static int[] F3 = {0, 1, 7, 5, 4, 16, 6, 17, 10, 8, 11, 9, 2, 13, 3, 15, 14, 12, 18, 19, 20, 21, 22, 23};
-    private static int[] F3C = permInverse(F3);
+    private static int[] F3C = inv(F3);
     private static int[] F4 = {0, 9, 2, 11, 4, 5, 6, 7, 8, 17, 10, 19, 14, 12, 15, 13, 16, 21, 18, 23, 20, 1, 22, 3};
-    private static int[] F4C = permInverse(F4);
+    private static int[] F4C = inv(F4);
     private static int[] F5 = {0, 1, 2, 3, 4, 5, 21, 20, 8, 9, 6, 7, 12, 13, 10, 11, 18, 16, 19, 17, 15, 14, 22, 23};
-    private static int[] F5C = permInverse(F5);
+    private static int[] F5C = inv(F5);
     private static int[] F6 = {13, 15, 2, 3, 1, 5, 0, 7, 8, 9, 10, 11, 12, 19, 14, 18, 16, 17, 4, 6, 22, 20, 23, 21};
-    private static int[] F6C = permInverse(F6);
+    private static int[] F6C = inv(F6);
 
-    public static int[] permInverse(int[] p) {
+    private static int[] inv(int[] p) {
         int n = p.length;
         int[] g = new int[n];
         for (int i = 1; i < n; i++) {
@@ -75,7 +75,7 @@ public class RubikState {
         return g;
     }
 
-    public char[] permApply(int[] perm) {
+    private char[] permApply(int[] perm) {
         char[] newPositions = new char[24];
         for (int i = 0; i < 24; i++) {
             newPositions[i] = positions[perm[i]];
@@ -83,11 +83,11 @@ public class RubikState {
         return newPositions;
     }
 
-    public boolean isGoal() {
+    boolean isGoal() {
         return heuristic() == 0;
     }
 
-    public int heuristic() {
+    private int heuristic() {
         int result = 0;
         for (int i = 0; i < positions.length; i += 4) {
             HashSet<Character> resultSet = new HashSet<>();
@@ -106,7 +106,7 @@ public class RubikState {
         return result;
     }
 
-    public HashMap<String, RubikState> getReachableStates() {
+    HashMap<String, RubikState> getReachableStates() {
         // map from **Reverse** of action applied to current state to get to another state
         HashMap<String, RubikState> moves = new HashMap<>();
         addBasicMove("F1C", F1, moves);
