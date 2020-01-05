@@ -1,9 +1,14 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    static int expNodes = 0; // Number of expanded nodes
+    static int genNodes = 0; // Number of generated nodes
+    static int Depth = 0; // The depth of the solution
+    static int maxNodes = 0; // Number of maximum nodes in memory
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        /**Scanner sc = new Scanner(System.in);
         String s = sc.nextLine().replaceAll(" ", "");
         String s1 = swap(s,2, 3);
         s = sc.nextLine().replaceAll(" ", "");
@@ -48,14 +53,38 @@ public class Main {
                 positions[i] = 'r';
             else
                 positions[i] = 'y';
-        }
-        //RubikState rState = new RubikState(positions);
+        }**/
+        var st = new RubikState();
+        st.executeMoveSeq("F1 F2 F5");
+        System.out.print("Problem: ");
+        print(st.positions);
+//        var solution = UCS_solve.UCS(st);
+ //       var solution = IDS_solve.IDS(st, 0);
+        var solution = Bidirectional_solve.Bidirectional(st);
+        System.out.println(solution);
+        Main.Depth = solution.split(" ").length;
+        solDetail();
     }
-    private static String swap(String str, int i, int j) {
+
+    private static void solDetail() {
+        System.out.println("Solution Depth = " + Main.Depth);
+        System.out.println("Generated = " + Main.genNodes);
+        System.out.println("Expanded = " + Main.expNodes);
+        System.out.println("Max in Memory = " + Main.maxNodes);
+    }
+
+    static void print(char[] positions) {
+        for (int i = 0; i < 24; i += 4) {
+            System.out.print(swap(String.valueOf(Arrays.copyOfRange(positions, i, i + 4)), 2, 3) + " ");
+        }
+        System.out.println();
+    }
+
+    static String swap(String str, int i, int j) {
         StringBuilder strB = new StringBuilder(str);
-        char l = strB.charAt(i) , r = strB.charAt(j);
-        strB.setCharAt(i,r);
-        strB.setCharAt(j,l);
+        char l = strB.charAt(i), r = strB.charAt(j);
+        strB.setCharAt(i, r);
+        strB.setCharAt(j, l);
         return strB.toString();
     }
 }
